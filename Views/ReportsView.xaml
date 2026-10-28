@@ -1,0 +1,152 @@
+<UserControl x:Class="HotelEase.Views.ReportsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="750" d:DesignWidth="1050"
+             Background="Transparent">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- 1. Report Selector & Date Filter Controls -->
+        <Border Grid.Row="0" Style="{StaticResource CardPanel}" Margin="0,0,0,16" Padding="16,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="14" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Report Type Dropdown -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Report Category" Style="{StaticResource TextLabel}" />
+                    <ComboBox ItemsSource="{Binding ReportTypes}" SelectedItem="{Binding SelectedReportType}" Style="{StaticResource ModernComboBox}" />
+                </StackPanel>
+
+                <!-- Date Range -->
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="From Date" Style="{StaticResource TextLabel}" />
+                    <DatePicker SelectedDate="{Binding FromDate, Mode=TwoWay}" Style="{StaticResource ModernDatePicker}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="To Date" Style="{StaticResource TextLabel}" />
+                    <DatePicker SelectedDate="{Binding ToDate, Mode=TwoWay}" Style="{StaticResource ModernDatePicker}" />
+                </StackPanel>
+
+                <!-- Quick Filters -->
+                <StackPanel Grid.Column="6" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,0,2">
+                    <Button Content="Today" Style="{StaticResource SecondaryButton}" Padding="8,7" Margin="0,0,4,0" Command="{Binding QuickFilterCommand}" CommandParameter="Today" />
+                    <Button Content="This Week" Style="{StaticResource SecondaryButton}" Padding="8,7" Margin="0,0,4,0" Command="{Binding QuickFilterCommand}" CommandParameter="Week" />
+                    <Button Content="This Month" Style="{StaticResource SecondaryButton}" Padding="8,7" Margin="0,0,4,0" Command="{Binding QuickFilterCommand}" CommandParameter="Month" />
+                    <Button Content="All Time" Style="{StaticResource SecondaryButton}" Padding="8,7" Command="{Binding QuickFilterCommand}" CommandParameter="All" />
+                </StackPanel>
+
+                <!-- Generate & Export Buttons -->
+                <StackPanel Grid.Column="8" VerticalAlignment="Bottom" Orientation="Horizontal" Margin="0,0,0,2">
+                    <Button Style="{StaticResource SecondaryButton}" Command="{Binding GenerateReportCommand}" Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconRefresh}" Fill="{StaticResource BrushPrimaryNavy}" Width="12" Height="12" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
+                            <TextBlock Text="Generate" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource PrimaryButton}" Command="{Binding ExportCsvCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconDownload}" Fill="#FFFFFF" Width="13" Height="13" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
+                            <TextBlock Text="Export to CSV" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 2. Visual Distribution Chart & Summary Metrics -->
+        <Grid Grid.Row="1" Margin="0,0,0,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="16" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Room Category Occupancy Bar Chart (Built with native WPF Shapes) -->
+            <Border Grid.Column="0" Style="{StaticResource CardPanel}" Padding="16,14">
+                <StackPanel>
+                    <TextBlock Text="Inventory Distribution &amp; Revenue by Room Tier" Style="{StaticResource TextHeader2}" FontSize="15" Margin="0,0,0,4" />
+                    <TextBlock Text="Visual volume comparison across room categories" Style="{StaticResource TextSubtitle}" Margin="0,0,0,12" />
+
+                    <ItemsControl ItemsSource="{Binding TypeDistribution}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="90" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" Text="{Binding RoomType}" FontWeight="SemiBold" VerticalAlignment="Center" FontSize="12" />
+                                    
+                                    <!-- Progress Bar -->
+                                    <Border Grid.Column="1" Height="14" CornerRadius="7" Background="#F1F5F9" SnapsToDevicePixels="True" Margin="0,0,12,0" VerticalAlignment="Center">
+                                        <ProgressBar Height="14" Value="{Binding OccupiedCount, Mode=OneWay}" Maximum="{Binding TotalCount, Mode=OneWay}" 
+                                                     BorderThickness="0" Background="Transparent" Foreground="{StaticResource BrushAccentTeal}" />
+                                    </Border>
+
+                                    <TextBlock Grid.Column="2" Text="{Binding TotalCount, StringFormat={}{0} Rooms}" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="3" Text="{Binding TotalRevenue, Converter={StaticResource CurrencyConverter}}" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource BrushPrimaryNavy}" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Summary KPI Chips -->
+            <Border Grid.Column="2" Style="{StaticResource CardPanel}" Padding="16,14">
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Audited Report Metrics" Style="{StaticResource TextHeader2}" FontSize="15" Margin="0,0,0,10" />
+
+                    <Border Background="#F8FAFC" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,8">
+                        <Grid>
+                            <TextBlock Text="Records in View:" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding TotalRecordCount}" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushPrimaryNavy}" HorizontalAlignment="Right" />
+                        </Grid>
+                    </Border>
+
+                    <Border Background="#F8FAFC" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,8">
+                        <Grid>
+                            <TextBlock Text="Overall Occupancy:" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding OccupancyRate, StringFormat={}{0}%}" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushAccentTeal}" HorizontalAlignment="Right" />
+                        </Grid>
+                    </Border>
+
+                    <Border Background="#F8FAFC" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="12,8">
+                        <Grid>
+                            <TextBlock Text="Gross Recorded Rev:" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding TotalRevenue, Converter={StaticResource CurrencyConverter}}" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushSuccess}" HorizontalAlignment="Right" />
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- 3. Report DataGrid -->
+        <Border Grid.Row="2" Style="{StaticResource CardPanel}" Padding="0">
+            <DataGrid ItemsSource="{Binding ReportRows}" Style="{StaticResource ModernDataGrid}" BorderThickness="0" AutoGenerateColumns="True" CanUserSortColumns="True" />
+        </Border>
+    </Grid>
+</UserControl>

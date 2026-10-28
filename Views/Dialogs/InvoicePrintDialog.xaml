@@ -1,0 +1,204 @@
+<Window x:Class="HotelEase.Views.Dialogs.InvoicePrintDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Guest Folio &amp; Invoice" Height="720" Width="680"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        Background="{StaticResource BrushCanvasBackground}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Printable Document Area -->
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="20">
+            <Border x:Name="InvoicePrintArea" Background="#FFFFFF" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="32" Width="600">
+                <StackPanel>
+                    <!-- Hotel Header & Invoice Title -->
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                <Path Data="{StaticResource IconHotel}" Fill="{StaticResource BrushAccentTeal}" Width="28" Height="28" Stretch="Uniform" Margin="0,0,10,0" />
+                                <TextBlock Text="HOTELEASE" FontSize="22" FontWeight="Bold" Foreground="{StaticResource BrushPrimaryNavy}" VerticalAlignment="Center" />
+                            </StackPanel>
+                            <TextBlock Text="Grand Horizon Resort &amp; Suites" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushTextSecondary}" />
+                            <TextBlock Text="100 Skyline Boulevard, Suite 500, Metro City" FontSize="11" Foreground="{StaticResource BrushTextMuted}" />
+                            <TextBlock Text="Phone: +1 (800) 555-4683  •  Email: reservations@hotelease.com" FontSize="11" Foreground="{StaticResource BrushTextMuted}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                            <Border Background="{StaticResource BrushAccentTealSoft}" CornerRadius="4" Padding="10,4" HorizontalAlignment="Right" Margin="0,0,0,6">
+                                <TextBlock Text="OFFICIAL FOLIO" FontSize="12" FontWeight="Bold" Foreground="{StaticResource BrushAccentTeal}" />
+                            </Border>
+                            <TextBlock x:Name="TxtInvoiceRef" Text="INV-2026-0001" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushPrimaryNavy}" HorizontalAlignment="Right" />
+                            <TextBlock x:Name="TxtInvoiceDate" Text="Date: Oct 26, 2026" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Separator Background="{StaticResource BrushBorder}" Margin="0,0,0,20" />
+
+                    <!-- Guest & Stay Metadata -->
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Billed To -->
+                        <Border Grid.Column="0" Background="#F8FAFC" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="14" Margin="0,0,8,0">
+                            <StackPanel>
+                                <TextBlock Text="GUEST INFORMATION" FontSize="10" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,0,6" />
+                                <TextBlock x:Name="TxtGuestName" Text="Alexander Vance" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushTextPrimary}" />
+                                <TextBlock x:Name="TxtGuestContact" Text="Phone: +1 (555) 234-5678" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" Margin="0,2,0,0" />
+                                <TextBlock x:Name="TxtGuestEmail" Text="a.vance@example.com" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Stay Details -->
+                        <Border Grid.Column="1" Background="#F8FAFC" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Padding="14" Margin="8,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="RESERVATION SUMMARY" FontSize="10" FontWeight="Bold" Foreground="{StaticResource BrushTextMuted}" Margin="0,0,0,6" />
+                                <TextBlock x:Name="TxtBookingRef" Text="Booking Ref: HE-2026-1001" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushPrimaryNavy}" />
+                                <TextBlock x:Name="TxtRoomAssigned" Text="Room 201 (Deluxe) — 2 Guests" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" Margin="0,2,0,0" />
+                                <TextBlock x:Name="TxtStayDates" Text="Oct 25, 2026 → Oct 28, 2026 (3 nights)" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Folio Line Items Table -->
+                    <Border BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="6" Margin="0,0,0,24">
+                        <StackPanel>
+                            <!-- Table Header -->
+                            <Grid Background="#F1F5F9" Height="36">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Description / Item" FontWeight="SemiBold" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center" Margin="14,0,0,0" />
+                                <TextBlock Grid.Column="1" Text="Qty/Nts" FontWeight="SemiBold" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <TextBlock Grid.Column="2" Text="Rate" FontWeight="SemiBold" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                <TextBlock Grid.Column="3" Text="Amount" FontWeight="SemiBold" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,14,0" />
+                            </Grid>
+
+                            <!-- Line 1: Room Charges -->
+                            <Grid Height="38">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="TxtLine1Desc" Grid.Column="0" Text="Room Lodging (Deluxe)" FontSize="12" VerticalAlignment="Center" Margin="14,0,0,0" />
+                                <TextBlock x:Name="TxtLine1Qty" Grid.Column="1" Text="3" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <TextBlock x:Name="TxtLine1Rate" Grid.Column="2" Text="$120.00" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                <TextBlock x:Name="TxtLine1Amount" Grid.Column="3" Text="$360.00" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,14,0" />
+                            </Grid>
+                            <Separator Background="#F1F5F9" Margin="0" />
+
+                            <!-- Line 2: Promotional Discount -->
+                            <Grid Height="34">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Applied Stay Discount / Promotion" FontSize="12" Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center" Margin="14,0,0,0" />
+                                <TextBlock Grid.Column="1" Text="-" FontSize="12" Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <TextBlock Grid.Column="2" Text="-" FontSize="12" Foreground="{StaticResource BrushTextMuted}" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                <TextBlock x:Name="TxtLine2Amount" Grid.Column="3" Text="-$20.00" FontSize="12" Foreground="{StaticResource BrushDanger}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,14,0" />
+                            </Grid>
+                            <Separator Background="#F1F5F9" Margin="0" />
+
+                            <!-- Line 3: Additional Services -->
+                            <Grid Height="34">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Incidental &amp; Hospitality Services" FontSize="12" VerticalAlignment="Center" Margin="14,0,0,0" />
+                                <TextBlock Grid.Column="1" Text="1" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                <TextBlock Grid.Column="2" Text="-" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                                <TextBlock x:Name="TxtLine3Amount" Grid.Column="3" Text="$15.00" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,14,0" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Financial Summary & Balance Due -->
+                    <Grid Margin="0,0,0,24">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="220" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" VerticalAlignment="Bottom">
+                            <TextBlock Text="Payment Terms:" FontWeight="SemiBold" FontSize="11" Foreground="{StaticResource BrushTextSecondary}" />
+                            <TextBlock Text="Payments accepted via Cash, Credit/Debit Cards, and instant UPI. Invoices valid upon receipt." FontSize="11" Foreground="{StaticResource BrushTextMuted}" TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+                            <Grid Margin="0,0,0,4">
+                                <TextBlock Text="Total Invoiced:" FontSize="13" Foreground="{StaticResource BrushTextSecondary}" />
+                                <TextBlock x:Name="TxtSummaryTotal" Text="$355.00" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Right" />
+                            </Grid>
+                            <Grid Margin="0,0,0,4">
+                                <TextBlock Text="Payments Received:" FontSize="13" Foreground="{StaticResource BrushSuccess}" />
+                                <TextBlock x:Name="TxtSummaryPaid" Text="$200.00" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushSuccess}" HorizontalAlignment="Right" />
+                            </Grid>
+                            <Separator Background="{StaticResource BrushBorder}" Margin="0,6,0,6" />
+                            <Grid>
+                                <TextBlock Text="Balance Outstanding:" FontSize="14" FontWeight="Bold" Foreground="{StaticResource BrushPrimaryNavy}" VerticalAlignment="Center" />
+                                <TextBlock x:Name="TxtSummaryBalance" Text="$155.00" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushDanger}" HorizontalAlignment="Right" />
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Footer Signatures -->
+                    <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <Line X1="0" Y1="0" X2="160" Y2="0" Stroke="{StaticResource BrushBorderDark}" StrokeThickness="1" Margin="0,0,0,4" />
+                            <TextBlock Text="Guest Signature" FontSize="11" Foreground="{StaticResource BrushTextMuted}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                            <Line X1="0" Y1="0" X2="160" Y2="0" Stroke="{StaticResource BrushBorderDark}" StrokeThickness="1" Margin="0,0,0,4" />
+                            <TextBlock Text="Authorized Receptionist" FontSize="11" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+
+        <!-- Dialog Bottom Toolbar -->
+        <Border Grid.Row="1" Background="#FFFFFF" BorderBrush="{StaticResource BrushBorder}" BorderThickness="0,1,0,0" Padding="18,12">
+            <Grid>
+                <TextBlock Text="HotelEase Folio System • Powered by Windows Presentation Foundation" VerticalAlignment="Center" FontSize="12" Foreground="{StaticResource BrushTextMuted}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Close" Style="{StaticResource SecondaryButton}" Width="80" Click="OnCloseClick" Margin="0,0,10,0" />
+                    <Button Style="{StaticResource PrimaryButton}" Width="120" Click="OnPrintClick">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconPrint}" Fill="#FFFFFF" Width="14" Height="14" Stretch="Uniform" Margin="0,0,6,0" VerticalAlignment="Center" />
+                            <TextBlock Text="Print Folio" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

@@ -1,0 +1,73 @@
+<Window x:Class="HotelEase.Views.Dialogs.GuestHistoryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Guest History &amp; Bookings" Height="520" Width="720"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        Background="{StaticResource BrushCanvasBackground}">
+
+    <Border Padding="24">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Header Profile Card -->
+            <Border Grid.Row="0" Background="#FFFFFF" BorderBrush="{StaticResource BrushBorder}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Width="46" Height="46" CornerRadius="23" Background="{StaticResource BrushAccentTealSoft}" Margin="0,0,14,0">
+                        <Path Data="{StaticResource IconGuests}" Fill="{StaticResource BrushAccentTeal}" Width="20" Height="20" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtGuestName" Text="Alexander Vance" FontSize="16" FontWeight="Bold" Foreground="{StaticResource BrushPrimaryNavy}" />
+                        <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
+                            <TextBlock x:Name="TxtGuestPhone" Text="+1 (555) 234-5678" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" Margin="0,0,14,0" />
+                            <TextBlock x:Name="TxtGuestEmail" Text="a.vance@example.com" FontSize="12" Foreground="{StaticResource BrushTextSecondary}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtTotalBookingsCount" Text="Total Bookings: 1" FontSize="13" FontWeight="SemiBold" Foreground="{StaticResource BrushAccentTeal}" HorizontalAlignment="Right" />
+                        <TextBlock x:Name="TxtGuestSince" Text="Member Since: Oct 2026" FontSize="11" Foreground="{StaticResource BrushTextMuted}" HorizontalAlignment="Right" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Bookings History Table -->
+            <DataGrid x:Name="GridHistory" Grid.Row="1" Style="{StaticResource ModernDataGrid}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Booking Ref" Binding="{Binding BookingReference}" Width="120" FontWeight="SemiBold" />
+                    <DataGridTextColumn Header="Room" Binding="{Binding RoomNumber}" Width="80" />
+                    <DataGridTextColumn Header="Type" Binding="{Binding RoomType}" Width="100" />
+                    <DataGridTextColumn Header="Dates" Binding="{Binding FormattedDates}" Width="*" />
+                    <DataGridTextColumn Header="Total Amount" Binding="{Binding TotalAmount, Converter={StaticResource CurrencyConverter}}" Width="100" />
+                    <DataGridTemplateColumn Header="Status" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="12" Padding="8,3" HorizontalAlignment="Left"
+                                        Background="{Binding BookingStatus, Converter={StaticResource StatusToBrushConverter}}">
+                                    <TextBlock Text="{Binding BookingStatus}" FontSize="11" FontWeight="SemiBold"
+                                               Foreground="{Binding BookingStatus, Converter={StaticResource StatusToForegroundConverter}}" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- Close Button -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                <Button Content="Close" Style="{StaticResource SecondaryButton}" Width="90" Click="OnCloseClick" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
